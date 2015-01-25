@@ -4,7 +4,18 @@ import java.security.MessageDigest;
 
 import java.util.Random;
 
-
+/**
+* <h1>MD5FixPointSearch</h1>
+* A simple java program that attempts to find a fix point for the MD5 function. It will try find a maximum prefix/suffix match.
+* <p>
+* 
+* Input argument (int) is the number of threads to start. Default is 7.
+*
+* @author  Thomas Egense
+* @author  Toke Eskildsen
+* @version 1.0
+* @since   2015-01-25 
+*/
 public class MD5FixPointSearch {
 
     final long startTime = System.currentTimeMillis();
@@ -29,9 +40,8 @@ public class MD5FixPointSearch {
             Thread t = new Thread (md5Thread);
             t.start();
         }
-
-
     }
+    
     private static class MD5Thread  implements Runnable {
         byte[] start;
 
@@ -98,10 +108,6 @@ public class MD5FixPointSearch {
         return sb.toString().getBytes();
     }
 
-
-
-
-    //Todo ask Toke
     private static int suffixMatch(byte[] oldDigest, byte[] newDigest) {
         byte[] b1= oldDigest.clone();
         byte[] b2= newDigest.clone();
