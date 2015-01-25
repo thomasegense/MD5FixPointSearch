@@ -9,7 +9,7 @@ public class MD5FixPointSearch {
 
     final long startTime = System.currentTimeMillis();
     long iterations = 0;
-    static int longestPreffixMatch=5; //to avoid all the spam in the start
+    static int longestPrefixMatch=5; //to avoid all the spam in the start
     static int longestSuffixMatch=5;
 
     static MessageDigest md=null;
@@ -54,9 +54,9 @@ public class MD5FixPointSearch {
                     int matchPrefix = prefixMatch(oldMD5, newMD5)/2;
                     int matchSuffix = suffixMatch(oldMD5, newMD5)/2;
 
-                    if (matchPrefix >= longestPreffixMatch) {
-                        System.out.println("preffix:"+matchPrefix + ": " + new String(oldMD5) + " -> " + new String(newMD5));               
-                        longestPreffixMatch = matchPrefix;               
+                    if (matchPrefix >= longestPrefixMatch) {
+                        System.out.println("prefix:"+matchPrefix + ": " + new String(oldMD5) + " -> " + new String(newMD5));               
+                        longestPrefixMatch = matchPrefix;               
                     }
                     if (matchSuffix >= longestSuffixMatch) {
                         System.out.println("suffix: "+matchSuffix  + ": " + new String(oldMD5) + " -> " + new String(newMD5));
