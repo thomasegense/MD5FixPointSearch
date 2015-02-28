@@ -4,6 +4,8 @@ It will try find a maximum prefix/suffix match.
 
 Input parameter is number of threads and it will default to 7 threads. 
 
+Blog entry about this program: https://plus.google.com/u/0/+ThomasEgense/posts/SRxXrTMdrFN
+
 So record so far is a 12 character prefix and also 12 character suffix match:
 
 suffix 12: df12c1434cec7850a7900ce027af4b78 -> b2f6053087022898fe920ce027af4b78
