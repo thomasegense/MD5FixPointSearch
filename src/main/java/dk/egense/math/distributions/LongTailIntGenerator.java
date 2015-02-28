@@ -19,7 +19,6 @@ public class LongTailIntGenerator {
 		}		
 	}    
 
-
 	// The totalSize of the array will be rounded up to nearest prime
 	public static int[] GenerateLongtailDistribution(int headSize,int headMax,int headMin,int totalSize,long seed){
 		int[] distribution;
@@ -31,29 +30,19 @@ public class LongTailIntGenerator {
 
 		//Generate the full dataset directly in the array-object
 		//First generate the head.
-		int[] head =generateHead(headSize, headMax, headMin, random);    	
-
-		//first copy the head into the totalCount structure;
-		for (int i=0;i<head.length;i++){
-			distribution[getBijectionMapping(i,distribution.length)]=head[i];           
+    	
+		for (int i=0;i<headSize;i++){
+			distribution[getBijectionMapping(i,distribution.length)]=new Double(random.nextInt(headMax)*Math.pow(random.nextDouble(),HEAD_CURVEFACTOR )).intValue();           
 		}
 
-		for (int i=head.length;i<totalSize;i++){
+		for (int i=headSize;i<totalSize;i++){
 			distribution[getBijectionMapping(i,distribution.length)]=new Double(headMin*Math.pow(random.nextDouble(),TAIL_CURVEFACTOR)+1).intValue(); 
 		}
 
 		return  distribution;
 	}
 
-	private static int[] generateHead(int headSize,int headMax,int headMin, Random random){
-		int[] head = new int[headSize];
-
-		for (int i=0;i<headSize;i++){
-			head[i]=new Double(random.nextInt(headMax)*Math.pow(random.nextDouble(),HEAD_CURVEFACTOR )).intValue();    	
-		}    	
-		return head;
-	}
-
+	
 	//Just a fast 'randomlike' bijective mapping from [0,n] -> [0,n]. N must be a prime
 	private static int getBijectionMapping(int index, int length){		
 		long  tmp=1l*index*BIJECTIONPRIME1+ BIJECTIONPRIME2;								
