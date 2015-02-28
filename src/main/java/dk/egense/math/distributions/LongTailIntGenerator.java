@@ -13,19 +13,20 @@ public class LongTailIntGenerator {
 
 	public static void main(String[] args) {
 		int[] dist =GenerateLongtailDistribution(100,100000,500, 300000000 ,1000);
-		
+
 		for (int i = 0;i <1000;i++){
 			System.out.println(dist[i]);
 		}		
 	}    
 
-	//totalsize must be prime
+
+	// The totalSize of the array will be rounded up to nearest prime
 	public static int[] GenerateLongtailDistribution(int headSize,int headMax,int headMin,int totalSize,long seed){
 		int[] distribution;
 		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));    	
 		totalSize = suggestedSize.nextProbablePrime().intValue();
-		System.out.println("array size:"+totalSize);
-	     Random random = new Random(seed); 
+		//System.out.println("array size:"+totalSize);
+		Random random = new Random(seed); 
 		distribution =  new int[totalSize];
 
 		//Generate the full dataset directly in the array-object
@@ -58,15 +59,15 @@ public class LongTailIntGenerator {
 		long  tmp=1l*index*BIJECTIONPRIME1+ BIJECTIONPRIME2;								
 		long tmp1 = tmp  % length;
 		int mapped = (int) tmp1;
-		
-        /* sanity check
+
+		/* sanity check
         if (mapped <0 || mapped >= totalCount.length ){
             System.out.println("not injective value:"+mapped +" for index:"+index);        
         }
         if (totalCount[mapped] != 0){
             System.out.println("not surjective: index="+index);        
         }
-        */        
+		 */        
 		return mapped;
 	}
 
