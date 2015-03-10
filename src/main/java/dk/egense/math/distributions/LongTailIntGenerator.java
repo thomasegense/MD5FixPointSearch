@@ -7,12 +7,13 @@ public class LongTailIntGenerator {
 	//The power parameter should be >= 1
 	private static double HEAD_CURVEFACTOR=1d; 
 	private static double TAIL_CURVEFACTOR=2d;
-	private static long BIJECTIONPRIME1 = 37;     
-	private static long BIJECTIONPRIME2 = 1001;     
+	private static long BIJECTIONPRIME1 = 0;      
+	private static long BIJECTIONPRIME2 = 0;     
 
 
 	public static void main(String[] args) {
-		int[] dist =GenerateLongtailDistribution(100,100000,500, 300000000 ,1000);
+
+	    int[] dist =GenerateLongtailDistribution(100,100000,500, 300000000 ,1000);
 
 		for (int i = 0;i <1000;i++){
 			System.out.println(dist[i]);
@@ -24,7 +25,10 @@ public class LongTailIntGenerator {
 		int[] distribution;
 		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));    	
 		totalSize = suggestedSize.nextProbablePrime().intValue();
-		//System.out.println("array size:"+totalSize);
+		BIJECTIONPRIME1 = new BigInteger(""+totalSize/3).nextProbablePrime().longValue();
+		BIJECTIONPRIME2 = new BigInteger(""+totalSize/2).nextProbablePrime().longValue();
+		
+		System.out.println("array size:"+totalSize +" prime1:"+BIJECTIONPRIME1 +" prime1:"+BIJECTIONPRIME2);
 		Random random = new Random(seed); 
 		distribution =  new int[totalSize];
 
