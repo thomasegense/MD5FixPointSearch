@@ -57,9 +57,9 @@ public class LongTailIntGenerator {
 		    histogram[i]=count;
 		}
 		
-		  for (int i =0;i<histogram.length;i++){
-	            System.out.println((i+1) +" bits:"+histogram[i]);          
-	        }
+		for (int i =0;i<histogram.length;i++){
+	         System.out.println((i+1) +" bits:"+histogram[i]);          
+	    }
 		
 		  
 				 
