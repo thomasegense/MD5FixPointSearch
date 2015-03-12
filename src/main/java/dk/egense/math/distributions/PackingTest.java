@@ -16,7 +16,7 @@ public class PackingTest {
     }
  
     public static void unsortedExample() {
-        int[] data = LongTailIntGenerator.GenerateLongtailDistribution(300000000,500000,100);
+        int[] data = LongTailIntGenerator.generateLongtailDistribution(300000000,500000,100);
       
         System.out.println("data size:"+data.length);
         int N=data.length;

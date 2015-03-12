@@ -9,24 +9,29 @@ public class LongTailIntGenerator {
 
 
 	public static void main(String[] args) {
+    int[] testBitDistribution= new int[]{150000570,75000002,37500001,18750000,9375000,4687500,2343750,1171875,585938,292969,146484,73242,36621,18311,9155,4578,2289,1144,575};
 
-		int[] dist =GenerateLongtailDistribution(300000000 , 500000,1000);		
+    
+         int[] dist = generateFromBitHistogram(testBitDistribution,1000);
+         int[] histogram = getHistogram(dist);
+         printHistorgram(histogram);                    
+		
+      /*
+		int[] dist = generateLongtailDistribution(300000000 , 500000,1000);		
 		int[] bitsRequiredHistogram = getHistogram(dist);
-
-		printHistorgram(bitsRequiredHistogram);		
+		printHistorgram(bitsRequiredHistogram);
+		*/		
 	}    
 
 	// The totalSize of the array will be rounded up to nearest prime
-	public static synchronized int[] GenerateLongtailDistribution(int totalSize, int maxValue, long seed){
+	public static synchronized int[] generateLongtailDistribution(int totalSize, int maxValue, long seed){
 		Random random = new Random(seed); 
 
 		//jump distance
 		int prime1=totalSize/3+random.nextInt(totalSize/4);
 		totalSize = nextPrime(totalSize);
-
 		BIJECTIONPRIME1 = new BigInteger(""+prime1).nextProbablePrime().longValue();		
 		BIJECTIONPRIME2 = new BigInteger(""+totalSize/2).nextProbablePrime().longValue();		
-
 		System.out.println("array size:"+totalSize +" prime1:"+BIJECTIONPRIME1 +" prime2:"+BIJECTIONPRIME2);
 
 		//Generate the full dataset directly in the array-object
@@ -57,8 +62,16 @@ public class LongTailIntGenerator {
 	}
 
 
-	public static synchronized int[] generateFromBitHistogram(int[] histogram,long seed){
-		int totalSize=countNumberEntries(histogram);					
+	public static synchronized int[] generateFromBitHistogram(int[] histogram,long seed){		
+		int totalSize=countNumberEntries(histogram);
+		Random random = new Random(seed); 
+		//jump distance
+		int prime1=totalSize/3+random.nextInt(totalSize/4);
+		totalSize = nextPrime(totalSize);
+		BIJECTIONPRIME1 = new BigInteger(""+prime1).nextProbablePrime().longValue();		
+		BIJECTIONPRIME2 = new BigInteger(""+totalSize/2).nextProbablePrime().longValue();		
+
+        					
 		int totalSizePrime = nextPrime(totalSize);
 		return generateFromBitHistogramPrimeSize(histogram, totalSizePrime, seed);	
 	}
