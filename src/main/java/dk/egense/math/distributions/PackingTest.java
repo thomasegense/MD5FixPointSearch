@@ -20,7 +20,7 @@ public class PackingTest {
         int length;
     
         int[] data = LongTailIntGenerator.GenerateLongtailDistribution(51200000,500000,101);
-
+     data[0]=5;
         length=data.length; 
         wrapper = new WrappedStreamedBlockPacker(data);
      
