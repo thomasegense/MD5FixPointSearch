@@ -1,5 +1,7 @@
 package dk.egense.math.distributions;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class FullBuildTest {
@@ -37,7 +39,14 @@ public class FullBuildTest {
          
         wrapper.flush(); 
     
-        //TODO increase count in orginal data and make full decompress and compare
+        
+           int[] dataUncompressed= wrapper.getUncompressed();
+
+           assertEquals(data.length, dataUncompressed.length);
+           for (int i=0;i<data.length;i++){
+        	   assertEquals("Data error for index:"+i,data[i], dataUncompressed[i]);
+           }
+           
         
 	}
 
