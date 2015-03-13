@@ -75,7 +75,7 @@ public class WrappedStreamedBlockPacker {
 	}
 
 	private void flushCacheBlock(int blocknumber){
-	//	System.out.println("flushing cache for block:"+blocknumber);
+		//	System.out.println("flushing cache for block:"+blocknumber);
 		int[] orgBlock = FastPFORCompresserUtil.unCompress(blocks[blocknumber], BLOCK_SIZE); //TODO use correct block size for last block    
 
 		for (int i=0;i<blockCacheCount[blocknumber];i++){
@@ -121,15 +121,15 @@ public class WrappedStreamedBlockPacker {
 	}
 
 
-	
+
 	//Uncompress all blocks and add them sequential to the int[] 
 	public int[] getUncompressed(){				
 		int[] data = new int[orgSize];
 		for (int i=0;i<numberOfBlocks;i++){			
 			int[] uncompressedBlock = getUncompressedBlock(i);		
 			for (int j=0;j<uncompressedBlock.length;j++){
-			      data[i*BLOCK_SIZE+j]=uncompressedBlock[j];			
-		}
+				data[i*BLOCK_SIZE+j]=uncompressedBlock[j];			
+			}
 			//Use faster copy, some error in below code
 			//TODO use System.arraycopy(uncompressedBlock,0,data,i*numberOfBlocks  ,(i+1)*numberOfBlocks-1 );
 		}
