@@ -50,8 +50,8 @@ public class WrappedStreamBlockPackerTest {
 	    int valBefore = wrapper.getValue(index);
 	    int trueValue=valBefore;
 	    for (int i=0;i<flush_cache_size-1;i++){
-	    	wrapper.increaseCachedValue(index);	         
-	        trueValue++;
+	    	wrapper.increaseCachedValue(index);	         	        
+	    	trueValue++;
 	    }
 	    
 	    assertEquals(valBefore, wrapper.getValue(index)); //It has not been flushed yet
@@ -77,18 +77,14 @@ public class WrappedStreamBlockPackerTest {
 	@Test
 	public void testFullDecompress() {
 		
-		int[] distOrg = LongTailIntGenerator.GenerateLongtailDistribution(351000000,50000, (long) (Math.random()*100000000d));		
-		distOrg[118]=6;
+		int[] distOrg = LongTailIntGenerator.GenerateLongtailDistribution(351000000,50000, (long) (Math.random()*100000000d));				
 		WrappedStreamedBlockPacker wrapper = new WrappedStreamedBlockPacker(distOrg);
-    	//wrapper.flush();
-		System.out.println(wrapper.getUncompressedBlock(0)[118]);
-		System.out.println(wrapper.getValue(118));
-    	int[] distDecompressed = wrapper.getUncompressed();
+    	wrapper.flush();
+		int[] distDecompressed = wrapper.getUncompressed();
 		
 		assertEquals(distOrg.length,distDecompressed.length);
-		for (int i=0;i<distOrg.length;i++){
-			
-			assertEquals(" error index:"+i,distOrg[i], distDecompressed[i]);
+		for (int i=0;i<distOrg.length;i++){		
+			assertEquals("error index: "+i,distOrg[i], distDecompressed[i]);
 		}		
 			
 	}
