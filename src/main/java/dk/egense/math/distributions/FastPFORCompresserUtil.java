@@ -18,7 +18,7 @@ public class FastPFORCompresserUtil {
                     new VariableByte());
         // compressing
       
-        int[] outBuf = new int[data.length * 4];
+        int[] outBuf = new int[data.length+1024];
         IntWrapper inPos = new IntWrapper();
         IntWrapper outPos = new IntWrapper();
         codec.compress(data, inPos, data.length, outBuf, outPos);
