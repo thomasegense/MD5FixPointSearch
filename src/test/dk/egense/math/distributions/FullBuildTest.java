@@ -34,19 +34,10 @@ public class FullBuildTest {
                 System.out.println("total updates:"+i +" total time:"+time +" updates/ms:"+1d*i/time);     
             }        
         }
-        System.out.println("flushing cache before compare count is correct"); 
-        wrapper.flush();
-        
-        
-        int[]  block1 = wrapper.getUncompressedBlock(1);
- System.out.println(block1.length);
-        
-        for (int i = 0;i<3000000;i++){
-            if (data[3000000+i] != block1[i]){
-                System.out.println("error index:"+i+ " values "+ data[i]+":"+block1[i] );
-            }
-        }
-         System.out.println("time:"+(System.currentTimeMillis()-start));
+         
+        wrapper.flush(); 
+    
+        //TODO increase count in orginal data and make full decompress and compare
         
 	}
 
