@@ -67,7 +67,7 @@ public class WrappedStreamedBlockPacker {
 		int nextCacheEntry =blockCacheCount[blocknumber];
 		blockCache[blocknumber][nextCacheEntry]=entry;
 		blockCacheCount[blocknumber]= ++nextCacheEntry;
-		    System.out.println("entry:"+entry +" for block:"+blocknumber +" block cache entry"+nextCacheEntry);
+		//    System.out.println("entry:"+entry +" for block:"+blocknumber +" block cache entry"+nextCacheEntry);
 		//Flush it if cache is full
 		if (nextCacheEntry==BLOCK_FLUSH_SIZE){
 			flushCacheBlock(blocknumber);
@@ -75,7 +75,7 @@ public class WrappedStreamedBlockPacker {
 	}
 
 	private void flushCacheBlock(int blocknumber){
-		System.out.println("flushing cache for block:"+blocknumber);
+	//	System.out.println("flushing cache for block:"+blocknumber);
 		int[] orgBlock = FastPFORCompresserUtil.unCompress(blocks[blocknumber], BLOCK_SIZE); //TODO use correct block size for last block    
 
 		for (int i=0;i<blockCacheCount[blocknumber];i++){

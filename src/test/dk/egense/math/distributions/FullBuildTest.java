@@ -11,24 +11,12 @@ public class FullBuildTest {
         
         int length;
     
-        int[] data = LongTailIntGenerator.GenerateLongtailDistribution(51200000,500000,101);
+        int[] data = LongTailIntGenerator.GenerateLongtailDistribution(640000000,500000,101);
 
         length=data.length; 
         wrapper = new WrappedStreamedBlockPacker(data);
      
-        
-
-     int[]  blocktest = wrapper.getUncompressedBlock(0);
-        
-        for (int i = 0;i<100;i++){
-            if (data[i] != blocktest[i]){
-                System.out.println("error index:"+i+ " values "+ data[i]+":"+blocktest[i] );
-            }
-            else{
-                System.out.println("OK index:"+i+ " values "+ data[i]+":"+blocktest[i] );
-            }
-        }
-    
+               
         wrapper.logCompressionData();
         
     //    System.out.println(data[12345677] +" : "+wrapper.getValue(12345677));
