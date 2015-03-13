@@ -11,7 +11,7 @@ public class LongTailIntGenerator {
 
 	public static void main(String[] args) {
 
-	    int[] dist =GenerateLongtailDistribution(300000000 , 500000,1000);
+	    int[] dist = GenerateLongtailDistribution(300000000 , 500000,1000);
 
 		
 	    long[] bitsRequiredHistogram = getHistogram(dist);
@@ -29,11 +29,12 @@ public class LongTailIntGenerator {
 	// The totalSize of the array will be rounded up to nearest prime
 	public static int[] GenerateLongtailDistribution(int totalSize, int maxValue, long seed){
 	    Random random = new Random(seed); 
-	    int[] distribution = new int[totalSize];
+
   	    
 		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));    	
 		totalSize = suggestedSize.nextProbablePrime().intValue();
-	    
+        int[] distribution = new int[totalSize];
+        
 		//jump distance
 		int prime1=totalSize/3+random.nextInt(totalSize/4);
 		
@@ -60,7 +61,7 @@ public class LongTailIntGenerator {
 		for (int i =0;i<histogram.length;i++){
 	         System.out.println((i+1) +" bits:"+histogram[i]);          
 	    }
-		
+		 
 		  
 				 
 		  int index =0;

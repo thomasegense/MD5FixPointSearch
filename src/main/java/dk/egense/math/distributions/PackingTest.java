@@ -1,52 +1,86 @@
 package dk.egense.math.distributions;
 
+
+
 import java.util.Arrays;
 
-import me.lemire.integercompression.Composition;
-import me.lemire.integercompression.FastPFOR;
-import me.lemire.integercompression.IntWrapper;
-import me.lemire.integercompression.IntegerCODEC;
-import me.lemire.integercompression.VariableByte;
 
 public class PackingTest {
 
 
     public static void main(String[] args){
-        unsortedExample();       
-    }
- 
-    public static void unsortedExample() {
-        int[] data = LongTailIntGenerator.GenerateLongtailDistribution(300000000,500000,100);
-      
-        System.out.println("data size:"+data.length);
-        int N=data.length;
-        
-        int[] compressed = new int [N+1024];// could need more
-        IntegerCODEC codec =  new 
-           Composition(
-                    new FastPFOR(),
-                    new VariableByte());
-        // compressing
-        IntWrapper inputoffset = new IntWrapper(0);
-        IntWrapper outputoffset = new IntWrapper(0);
-        
-        long start=System.currentTimeMillis();
-        codec.compress(data,inputoffset,data.length,compressed,outputoffset);
-        System.out.println("compressed unsorted integers from "+data.length*4/1024+"KB to "+outputoffset.intValue()*4/1024+"KB");
-        System.out.println("compress time:"+(System.currentTimeMillis()-start));
-        
-        // we can repack the data: (optional)
-        compressed = Arrays.copyOf(compressed,outputoffset.intValue());
 
+        testBlockStreamCompressionWrapper();
+           //unsortedExample();       
+    }
+   
+    public static void testBlockStreamCompressionWrapper(){
+        WrappedStreamedBlockPacker wrapper = null;
         
+        int length;
+    
+        int[] data = LongTailIntGenerator.GenerateLongtailDistribution(51200000,500000,101);
+
+        length=data.length; 
+        wrapper = new WrappedStreamedBlockPacker(data);
+     
+        
+
+     int[]  blocktest = wrapper.getUncompressedBlock(0);
+        
+        for (int i = 0;i<100;i++){
+            if (data[i] != blocktest[i]){
+                System.out.println("error index:"+i+ " values "+ data[i]+":"+blocktest[i] );
+            }
+            else{
+                System.out.println("OK index:"+i+ " values "+ data[i]+":"+blocktest[i] );
+            }
+        }
+    
+        wrapper.logCompressionData();
+        
+    //    System.out.println(data[12345677] +" : "+wrapper.getValue(12345677));
+    
+        long start= System.currentTimeMillis();
+        for (int i =0;i<10000000;i++){
+         int index = (int) (1d*Math.random()*length);
+            wrapper.increaseCachedValue(index);
+     
+            //Also update org data for comparison:
+            data[index]=data[index]+1;
+            
+            if (i%1000000==0){
+                long time = System.currentTimeMillis()-start;
+                System.out.println("total updates:"+i +" total time:"+time +" updates/ms:"+1d*i/time);     
+            }        
+        }
+        System.out.println("flushing cache before compare count is correct"); 
+        wrapper.flush();
+        
+        
+        int[]  block0 = wrapper.getUncompressedBlock(0);
+        
+        for (int i = 0;i<3000000;i++){
+            if (data[i] != block0[i]){
+                System.out.println("error index:"+i+ " values "+ data[i]+":"+block0[i] );
+            }
+        }
+         System.out.println("time:"+(System.currentTimeMillis()-start));
+        
+    }
+    
+    
+    public static void unsortedExample() {
+       int[] data = LongTailIntGenerator.GenerateLongtailDistribution(300000000,500000,100);
+       long start=System.currentTimeMillis();               
+       int[] compressed = FastPFORCompresserUtil.compress(data);
+        System.out.println("compress ratio:"+1d*compressed.length/data.length+" compress time:"+(System.currentTimeMillis()-start));
 
         start=System.currentTimeMillis();
-        int[] recovered = new int[N];
-        IntWrapper recoffset = new IntWrapper(0);
-        codec.uncompress(compressed,new IntWrapper(0),compressed.length,recovered,recoffset);
+        int[] data1 =FastPFORCompresserUtil.unCompress(compressed,data.length);
         System.out.println("decompress time:"+(System.currentTimeMillis()-start));
         
-        if(Arrays.equals(data,recovered)) 
+        if(Arrays.equals(data,data1)) 
           System.out.println("data is recovered without loss");
         else
           throw new RuntimeException("bug"); // could use assert
