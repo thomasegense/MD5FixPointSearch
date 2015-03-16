@@ -14,7 +14,7 @@ public class LongTailIntGenerator {
 		int[] dist = GenerateLongtailDistribution(300000000 , 500000,1000);
 
 
-		long[] bitsRequiredHistogram = getHistogram(dist);
+		int[] bitsRequiredHistogram = getHistogram(dist);
 		int count=0;
 		for (int i =0;i<bitsRequiredHistogram.length;i++){
 			System.out.println((i+1) +" bits:"+bitsRequiredHistogram[i]);          
@@ -33,7 +33,6 @@ public class LongTailIntGenerator {
 
 		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));        
 		totalSize = suggestedSize.nextProbablePrime().intValue();
-		int[] distribution = new int[totalSize];
 
 		//jump distance
 		int prime1=totalSize/3+random.nextInt(totalSize/4);
@@ -57,23 +56,12 @@ public class LongTailIntGenerator {
 			remaining = remaining-count;                                    
 			histogram[i]=count;
 		}
-
-		for (int i =0;i<histogram.length;i++){
-			System.out.println((i+1) +" bits:"+histogram[i]);          
-		}
-
-
-
-		int index =0;
-		for (int i=0;i<histogram.length;i++){
-			int localMax= (int) Math.pow(2, i);
-			for (int j=0;j<histogram[i];j++){
-				distribution[getBijectionMapping(index++,distribution.length)]=random.nextInt(localMax);
-			}                       
-		}
-
-
+        histogram[0]=histogram[0]+remaining;
+		
+		int[] distribution = generateFromBitHistogram(histogram, seed);		 		
+		
 		return  distribution;
+
 	}
 
 
@@ -94,8 +82,49 @@ public class LongTailIntGenerator {
 		return mapped;
 	}
 
-	public static long[] getHistogram(int[] maxima) {
-		final long[] histogram = new long[64];
+	public static synchronized int[] generateFromBitHistogram(int[] histogram,long seed){
+		int totalSize=0;
+		for (int i=0;i<histogram.length;i++){
+			totalSize+=histogram[i];
+		}				
+		int totalSizePrime = nextPrime(totalSize);
+		System.out.println("totalSize:"+totalSize);
+		
+		return generateFromBitHistogramPrimeSize(histogram, totalSizePrime, seed);	
+	}
+
+	//The totalsize must be prime.
+	private static int[] generateFromBitHistogramPrimeSize(int[] histogram,int totalSizePrime,long seed){		
+		int[] distribution = new int[totalSizePrime];		
+		Random random = new Random(seed);
+		int index =0;
+		for (int i=0;i<histogram.length;i++){
+			int localMax= ((int) Math.pow(2, i+1))/2;
+			for (int j=0;j<histogram[i];j++){
+				distribution[getBijectionMapping(index++,distribution.length)]=localMax +random.nextInt(Math.max(1, localMax));
+			}		      		      
+		}
+		return distribution;	
+	}
+
+	private static int nextPrime(int totalSize){
+		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));    	
+		int totalSizePrime = suggestedSize.nextProbablePrime().intValue();
+		return totalSizePrime; 
+	}
+
+	private static void printHistogram(int[] bitsRequiredHistogram){
+		int count=0;
+		for (int i =0;i<bitsRequiredHistogram.length;i++){
+			System.out.println((i+1) +" bits:"+bitsRequiredHistogram[i]);	       
+			count += (int) bitsRequiredHistogram[i];
+		}
+		System.out.println(count);
+	}
+
+	
+	public static int[] getHistogram(int[] maxima) {
+		final int[] histogram = new int[32];
 		for (int maxValue : maxima) {
 			int bitsRequired = bitsRequired(maxValue);
 			histogram[bitsRequired == 0 ? 0 : bitsRequired - 1]++;
@@ -104,7 +133,7 @@ public class LongTailIntGenerator {
 	}
 
 	public static int bitsRequired(int maxValue){       
-		return Math.max(1, 64 - Long.numberOfLeadingZeros(maxValue));        
+		return Math.max(1, 32 - Integer.numberOfLeadingZeros(maxValue));        
 	}
 
 }

@@ -24,7 +24,7 @@ public class FullBuildTest {
 		//    System.out.println(data[12345677] +" : "+wrapper.getValue(12345677));
 
 		long start= System.currentTimeMillis();
-		for (int i =0;i<100000000;i++){
+		for (int i =0;i<1000000000;i++){
 			int index = (int) (1d*Math.random()*length);
 			wrapper.increaseCachedValue(index);
 
