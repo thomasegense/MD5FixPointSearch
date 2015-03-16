@@ -28,18 +28,6 @@ public class LongTailIntGenerator {
 
 	// The totalSize of the array will be rounded up to nearest prime
 	public static int[] GenerateLongtailDistribution(int totalSize, int maxValue, long seed){
-		Random random = new Random(seed); 
-
-
-		BigInteger suggestedSize = new BigInteger(""+(totalSize-1));        
-		totalSize = suggestedSize.nextProbablePrime().intValue();
-
-		//jump distance
-		int prime1=totalSize/3+random.nextInt(totalSize/4);
-
-		BIJECTIONPRIME1 = new BigInteger(""+prime1).nextProbablePrime().longValue();        
-		BIJECTIONPRIME2 = new BigInteger(""+totalSize/2).nextProbablePrime().longValue();       
-		System.out.println("array size:"+totalSize +" prime1:"+BIJECTIONPRIME1 +" prime2:"+BIJECTIONPRIME2);
 
 		//Generate the full dataset directly in the array-object
 		//First generate the head.
@@ -89,13 +77,26 @@ public class LongTailIntGenerator {
 		}				
 		int totalSizePrime = nextPrime(totalSize);
 		System.out.println("totalSize:"+totalSize);
-		
-		return generateFromBitHistogramPrimeSize(histogram, totalSizePrime, seed);	
+
+        Random random = new Random(seed);
+
+        BigInteger suggestedSize = new BigInteger(""+(totalSizePrime-1));
+        totalSizePrime = suggestedSize.nextProbablePrime().intValue();
+
+        //jump distance
+        int prime1=totalSizePrime/3+random.nextInt(totalSizePrime/4);
+
+        BIJECTIONPRIME1 = new BigInteger(""+prime1).nextProbablePrime().longValue();
+        BIJECTIONPRIME2 = new BigInteger(""+totalSizePrime/2).nextProbablePrime().longValue();
+        System.out.println("array size:"+totalSizePrime +" prime1:"+BIJECTIONPRIME1 +" prime2:"+BIJECTIONPRIME2);
+
+		return generateFromBitHistogramPrimeSize(histogram, totalSizePrime, seed);
 	}
 
 	//The totalsize must be prime.
-	private static int[] generateFromBitHistogramPrimeSize(int[] histogram,int totalSizePrime,long seed){		
-		int[] distribution = new int[totalSizePrime];		
+	private static int[] generateFromBitHistogramPrimeSize(int[] histogram,int totalSizePrime,long seed){
+
+		int[] distribution = new int[totalSizePrime];
 		Random random = new Random(seed);
 		int index =0;
 		for (int i=0;i<histogram.length;i++){
